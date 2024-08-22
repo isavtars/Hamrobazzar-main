@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const ErrorHandler = require("../utils/ErrorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
+const catchAsyncErrorsnew = require("../middleware/catchAsyncErrorsnew");
 
 // this is for this
 
@@ -20,6 +21,7 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
   router.get(
     "/demo-data",
     catchAsyncErrors(async (req, res, next) => {
+    catchAsyncErrorsnew(async (req, res) => {
       try {
 
         res.status(200).json({
