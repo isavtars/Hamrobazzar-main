@@ -21,6 +21,7 @@ import {
   OrderDetailsPage,
   TrackOrderPage,
   UserInbox,
+  NotFoundPage
 } from "./routes/Routes.js";
 import {
   ShopDashboardPage,
@@ -60,6 +61,8 @@ import axios from "axios";
 import { server } from "./server";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+
+
 
 const App = () => {
   const [stripeApikey, setStripeApiKey] = useState("");
@@ -107,8 +110,8 @@ const App = () => {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/product/:id" element={<ProductDetailsPage />} />
         <Route path="/best-selling" element={<BestSellingPage />} />
-        <Route path="/events" element={<EventsPage />} />
-        <Route path="/faq" element={<FAQPage />} />
+        {/* <Route path="/events" element={<EventsPage />} />
+        <Route path="/faq" element={<FAQPage />} /> */}
         <Route
           path="/checkout"
           element={
@@ -151,7 +154,11 @@ const App = () => {
           }
         />
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
-        {/* shop Routes */}
+        {/* Add 404 catch-all route */}
+        <Route path="*" element={<NotFoundPage />} />
+
+
+        {/* shop Routes  this is shop admin/dashboard route*/}
         <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShopLoginPage />} />
         <Route
