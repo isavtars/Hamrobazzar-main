@@ -4,6 +4,9 @@ import { Navigate } from "react-router-dom";
 const ProtectedAdminRoute = ({ children }) => {
   const { loading, isAuthenticated,user } = useSelector((state) => state.user);
   if (loading === false) {
+
+    console.log("currentuser",user.role);
+    
     if (!isAuthenticated) {
       return <Navigate to="/login" replace />;
     } else if(user.role !== "Admin"){

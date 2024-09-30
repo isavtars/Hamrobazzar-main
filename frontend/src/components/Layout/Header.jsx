@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
 import { categoriesData, productData } from "../../static/data";
 import logo from "../../images/alvioni  fashion brand art design logo (2) (1).png"
+import logo2 from"../../images/dosrobajar.png"
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -18,6 +19,54 @@ import { backend_url } from "../../server";
 import Cart from "../cart/Cart";
 import Wishlist from "../Wishlist/Wishlist";
 import { RxCross1 } from "react-icons/rx";
+import { searchProductsBM25 } from './algorithm.js';
+
+const bm25 = (query, products) => {
+  const k1 = 1.5; // BM25 parameter
+  const b = 0.75; // BM25 parameter
+  const avgdl = products.reduce((acc, p) => acc + p.name.split(" ").length, 0) / products.length;
+
+  // Calculate document frequency for each term in the corpus
+  const documentFrequency = {};
+  products.forEach(product => {
+    const terms = new Set(product.name.toLowerCase().split(" "));
+    terms.forEach(term => {
+      if (documentFrequency[term]) {
+        documentFrequency[term] += 1;
+      } else {
+        documentFrequency[term] = 1;
+      }
+    });
+  });
+
+  const N = products.length;
+
+  const scoreProduct = (product, queryTerms) => {
+    const productTerms = product.name.toLowerCase().split(" ");
+    const docLength = productTerms.length;
+    let score = 0;
+
+    queryTerms.forEach(term => {
+      const termFrequency = productTerms.filter(t => t === term).length;
+      if (termFrequency > 0) {
+        const df = documentFrequency[term] || 0;
+        const idf = Math.log((N - df + 0.5) / (df + 0.5) + 1);
+        score += idf * ((termFrequency * (k1 + 1)) / (termFrequency + k1 * (1 - b + b * (docLength / avgdl))));
+      }
+    });
+
+    return score;
+  };
+
+  const queryTerms = query.toLowerCase().split(" ");
+  const scoredProducts = products.map(product => ({
+    ...product,
+    score: scoreProduct(product, queryTerms),
+  }));
+
+  return scoredProducts.sort((a, b) => b.score - a.score);
+};
+
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -33,17 +82,25 @@ const Header = ({ activeHeading }) => {
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
 
+ 
+
+  
+    
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
 
-    const filteredProducts =
-      allProducts &&
-      allProducts.filter((product) =>
-        product.name.toLowerCase().includes(term.toLowerCase())
-      );
+    if (term.trim() === "") {
+      setSearchData([]);
+      return;
+    }
+
+    // Use BM25 algorithm for search
+    const filteredProducts = bm25(term, allProducts);
     setSearchData(filteredProducts);
   };
+
+
 
   window.addEventListener("scroll", () => {
     if (window.scrollY > 70) {
@@ -59,14 +116,14 @@ const Header = ({ activeHeading }) => {
         <div className="hidden 800px:h-[50px] 800px:my-[20px] 800px:flex items-center justify-between">
           <div>
             <Link to="/">
-              <img style={{"height":"300px"}}
-                src={logo}
+              <img style={{"height":"150px"}}
+                src={logo2}
                 alt=""
               />
             </Link>
           </div>
           {/* search box */}
-          <div className="w-[50%] relative">
+          <div className="w-[50%] relative p-[100px]">
             <input
               type="text"
               placeholder="Search Product..."
@@ -124,7 +181,7 @@ const Header = ({ activeHeading }) => {
               <button
                 className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
               >
-                All Categories
+                All Categories 
               </button>
               <IoIosArrowDown
                 size={20}

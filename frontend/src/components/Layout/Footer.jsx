@@ -12,6 +12,7 @@ import {
   footerSupportLinks,
 } from "../../static/data";
 import image from "../../images/alvioni  fashion brand art design logo (2) (1).png"
+import logo2 from"../../images/dosrobajar.png"
 const Footer = () => {
   return (
     <div className="bg-[#000] text-white">
@@ -36,11 +37,12 @@ const Footer = () => {
       </div>
       <div className="grid grid-cols-1 sm:gird-cols-3 lg:grid-cols-4 gap-6 sm:px-8 px-5 py-16 sm:text-center">
         <ul className="px-5 text-center sm:text-start flex sm:block flex-col items-center">
-          <img
-            src={image}
-            alt=""
-            style={{ filter: "brightness(0) invert(1)" }}
-          />
+        <img
+  src={logo2}
+  alt=""
+  className="h-[100px] w-[100px]"
+/>
+
           <br />
           <p>The home and elements needeed to create beatiful products.</p>
           <div className="flex items-center mt-[15px]">
