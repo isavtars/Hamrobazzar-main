@@ -1,0 +1,9 @@
+.tooltip {
+    position: relative; /* or absolute based on your layout */
+    background: white;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: transform 0.2s ease; /* Smooth transition for tooltip */
+    z-index: 10; /* Ensure the tooltip appears above other elements */
+}

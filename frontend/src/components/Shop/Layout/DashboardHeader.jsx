@@ -6,19 +6,22 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { BiMessageSquareDetail } from "react-icons/bi";
 import { backend_url } from "../../../server";
-import image from "../../../images/alvioni  fashion brand art design logo (2) (1).png"
+import logo2 from "../../../images/dosrobajar.png"
 const DashboardHeader = () => {
   const { seller } = useSelector((state) => state.seller);
+  console.log("seller",seller);
   return (
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
         <Link to="/dashboard">
-          <img style={{"height":"250px"}}
-            src={image}
+          <img style={{"height":"80px"}}
+            src={logo2}
             alt=""
           />
         </Link>
       </div>
+
+      <h1 className="text-red-500 font-Poppins pr-10  font[100]">{seller.name}</h1>
       <div className="flex items-center">
         <div className="flex items-center mr-4">
           <Link to="/dashboard/cupouns" className="800px:block hidden">

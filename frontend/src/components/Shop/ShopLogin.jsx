@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
+import DashboardHeader from './Layout/DashboardHeader';
 
 const ShopLogin = () => {
   const navigate = useNavigate();
@@ -131,6 +132,14 @@ const ShopLogin = () => {
               <h4>Not have any account?</h4>
               <Link to="/shop-create" className="text-blue-600 pl-2">
                 Sign Up
+              </Link>
+            </div>
+
+
+            <div className={`${styles.noramlFlex} w-full`}>
+              <h4>you are not seller</h4>
+              <Link to="/" className="text-blue-600 pl-2">
+                Dashboard
               </Link>
             </div>
           </form>

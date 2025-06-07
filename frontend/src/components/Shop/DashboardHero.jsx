@@ -8,16 +8,21 @@ import { getAllOrdersOfShop } from "../../redux/actions/order";
 import { getAllProductsShop } from "../../redux/actions/product";
 import { Button } from "@material-ui/core";
 import { DataGrid } from "@material-ui/data-grid";
+import DeliveryStatus from './chart/delivery_status';
+import CategoryLineChart from "./chart/cateogory";
+import ProductStockChart from "./chart/product_count"
 
 const DashboardHero = () => {
   const dispatch = useDispatch();
   const { orders } = useSelector((state) => state.order);
   const { seller } = useSelector((state) => state.seller);
   const { products } = useSelector((state) => state.products);
+ 
 
   useEffect(() => {
      dispatch(getAllOrdersOfShop(seller._id));
      dispatch(getAllProductsShop(seller._id));
+     console.log('oproductsrder',products)
   }, [dispatch]);
 
   const availableBalance = seller?.availableBalance.toFixed(2);
@@ -62,7 +67,7 @@ const DashboardHero = () => {
       renderCell: (params) => {
         return (
           <>
-            <Link to={`/dashboard/order/${params.id}`}>
+            <Link to={`/order/${params.id}`}>
               <Button>
                 <AiOutlineArrowRight size={20} />
               </Button>
@@ -142,6 +147,38 @@ const DashboardHero = () => {
         </div>
       </div>
       <br />
+
+      {/* //              Implement graphs fro dashboard/ */}
+      <div
+  style={{
+    display: 'flex',
+    justifyContent: 'center', // Center horizontally
+    alignItems: 'center', // Center vertically
+    marginBottom: '20px',
+  }}
+>
+  <DeliveryStatus orders={orders} />
+</div>
+
+
+
+<ProductStockChart/>
+
+
+<div
+  style={{
+    display: 'flex',
+    justifyContent: 'center', // Center horizontally
+    alignItems: 'center', // Center vertically
+    marginBottom: '20px',
+  }}
+>
+  <CategoryLineChart />
+</div>
+
+
+
+
       <h3 className="text-[22px] font-Poppins pb-2">Latest Orders</h3>
       <div className="w-full min-h-[45vh] bg-white rounded">
       <DataGrid

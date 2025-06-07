@@ -7,34 +7,25 @@ import Loader from "../components/Layout/Loader";
 import ProductCard from "../components/Route/ProductCard/ProductCard";
 import styles from "../styles/styles";
 
-// Merge Sort algorithm to sort products by a key (e.g., price)
-const mergeSort = (array, key) => {
+// Quick Sort algorithm to sort products by a key (e.g., price)
+const quickSort = (array, key) => {
   if (array.length <= 1) {
     return array;
   }
 
-  const middleIndex = Math.floor(array.length / 2);
-  const left = mergeSort(array.slice(0, middleIndex), key);
-  const right = mergeSort(array.slice(middleIndex), key);
+  const pivot = array[array.length - 1];
+  const left = [];
+  const right = [];
 
-  return merge(left, right, key);
-};
-
-const merge = (left, right, key) => {
-  let sortedArray = [];
-  let i = 0, j = 0;
-
-  while (i < left.length && j < right.length) {
-    if (left[i][key] < right[j][key]) {
-      sortedArray.push(left[i]);
-      i++;
+  for (let i = 0; i < array.length - 1; i++) {
+    if (array[i][key] < pivot[key]) {
+      left.push(array[i]);
     } else {
-      sortedArray.push(right[j]);
-      j++;
+      right.push(array[i]);
     }
   }
 
-  return [...sortedArray, ...left.slice(i), ...right.slice(j)];
+  return [...quickSort(left, key), pivot, ...quickSort(right, key)];
 };
 
 const ProductsPage = () => {
@@ -51,10 +42,8 @@ const ProductsPage = () => {
       d = allProducts && allProducts.filter((i) => i.category === categoryData);
     }
 
-
-    const sortedData = mergeSort(d || [], 'price');
+    const sortedData = quickSort(d || [], 'price');
     setData(sortedData);
-
   }, [allProducts, categoryData]);
 
   return (
